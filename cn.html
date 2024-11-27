@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Anybimanual">
+		<meta name="keywords"
+			content="Legged Locomotion, Agile Locomotion, Parkour, Reinforcement Learning, Visuomotor Control, Sim-to-Real Transfer">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Robot Parkour Learning</title>
+		<link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+		<link rel="stylesheet" href="./static/css/bulma.min.css">
+		<link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+		<link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+		<link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+		<link rel="stylesheet" href="./static/css/academicons.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+		<link rel="stylesheet" href="./static/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+		<script src="./static/js/jquery.slim.min.js">
+		</script>
+		<script src="./static/js/popper.min.js">
+		</script>
+		<script src="./static/js/bootstrap.min.js">
+		</script>
+		<style>
+			@font-face {
+				font-family: 'FZSHJW';
+				src: url('./static/cn/FZSHJW.TTF') format('truetype');
+			}
+		</style>
+		<link rel="stylesheet" href="./static/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="./static/css/layout.css" />
+		<link rel="stylesheet" href="./static/css/media.css" />
+		<link rel="stylesheet" href="./static/css/animation.css" />
+
+		<script defer src="./static/js/fontawesome.all.min.js"></script>
+		<script src="./static/js/bulma-carousel.min.js"></script>
+		<script src="./static/js/bulma-slider.min.js"></script>
+
+		<link rel="icon" href="./favicon.ico">
+
+		<meta property="og:site_name" content="Robot Parkour Learning" />
+		<meta property="og:type" content="video.other" />
+		<meta property="og:title" content="Robot Parkour Learning" />
+		<meta property="og:description" content="by Ziwen Zhuang, Zipeng Fu, Chelsea Finn, Hang Zhao" />
+		<meta property="og:url" content="https://robot-parkour.github.io/" />
+		<meta property="og:image" content="https://robot-parkour.github.io/static/images/preview.gif" />
+		<meta property="og:image:secure" content="https://robot-parkour.github.io/static/images/preview.gif" />
+		<meta property="og:video" content="https://www.youtube.com/embed/M7lDCSF0KP0" />
+		<meta property="og:video:secure" content="https://www.youtube.com/embed/M7lDCSF0KP0" />
+		<meta property="og:image:width" content="1280" />
+		<meta property="og:image:height" content="720" />
+
+		<meta property="article:publisher" content="https://zipengfu.github.io" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Robot Parkour Learning" />
+		<meta name="twitter:description" content="by Ziwen Zhuang, Zipeng Fu, Chelsea Finn, Hang Zhao and co" />
+		<meta name="twitter:url" content="https://robot-parkour.github.io/" />
+		<meta name="twitter:image" content="https://robot-parkour.github.io/static/images/preview.gif" />
+		<meta name="twitter:site" content="@zipengfu" />
+		<meta name="twitter:card" content="player" />
+		<meta name="twitter:player" content="https://www.youtube.com/embed/M7lDCSF0KP0" />
+		<meta name="twitter:player:width" content="1280" />
+		<meta name="twitter:player:height" content="720" />
+
+		<!-- <script src="https://www.youtube.com/iframe_api"></script> -->
+		<style>
+			:root {
+				--text-color: #000000;
+				--background-color: #ffffff;
+			}
+
+			pre {
+				background-color: var(--background-color);
+				color: var(--text-color);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<!-- -fluid -->
+			<div class="row">
+				<div class="page">
+					<img class="page-image" src="././static/cn/banner.jpg" alt="" />
+					<div class="page-title">
+						<h1>Robot Parkour Learning</h1>
+					</div>
+					<div class="page-click">
+						<div class="page-name pc">
+							<a class="animation-link" href="https://ziwenzhuang.github.io/">Ziwen Zhuang*</a>
+							<a class="animation-link" href="https://zipengfu.github.io/">Zipeng Fu*</a>
+							<a class="animation-link" href="https://www.jianrenw.com/">Jianren Wang</a>
+							<a class="animation-link" href="http://www.cs.cmu.edu/~cga/">Christopher Atkeson</a>
+							<a class="animation-link" href="https://robotics.shanghaitech.edu.cn/people/soeren">Sören
+								Schwertfeger</a>
+							<a class="animation-link" href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a>
+							<a class="animation-link" href="https://hangzhaomit.github.io/">Hang Zhao</a>
+						</div>
+						<div class="mob" style="width:100%;">
+							<div class="page-name" style="display:block;">
+								<div class=""
+									style="display:flex;justify-content:space-around;align-items:center;margin-bottom:0.5vh;">
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link" href="https://ziwenzhuang.github.io/">Ziwen
+											Zhuang*</a>
+									</div>
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link" href="https://zipengfu.github.io/">Zipeng Fu*</a>
+									</div>
+								</div>
+								<div class=""
+									style="display:flex;justify-content:space-around;align-items:center;margin-bottom:0.5vh;">
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link" href="https://www.jianrenw.com/">Jianren Wang</a>
+									</div>
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link" href="http://www.cs.cmu.edu/~cga/">Christopher
+											Atkeson</a>
+									</div>
+								</div>
+								<div class=""
+									style="display:flex;justify-content:space-around;align-items:center;margin-bottom:0.5vh;">
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link"
+											href="https://robotics.shanghaitech.edu.cn/people/soeren">Sören
+											Schwertfeger</a>
+									</div>
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link" href="https://ai.stanford.edu/~cbfinn/">Chelsea
+											Finn</a>
+									</div>
+								</div>
+								<div class="" style="display:flex;justify-content:space-around;align-items:center;">
+									<div style="flex:1;text-align:center;">
+										<a class="animation-link" href="https://hangzhaomit.github.io/">Hang Zhao</a>
+									</div>
+									<div style="flex:1;text-align:center;"></div>
+								</div>
+							</div>
+						</div>
+						<div class="" style="width:100%;display:flex;justify-content:center;">
+							<div class="namebottomImage">
+								<img src="./static/cn/new1.svg" alt="" />
+								<img src="./static/cn/new2.png" alt="" />
+							</div>
+						</div>
+						<div class="page-h3-name" style="margin-top:3vh;">
+							<h3 style="margin:0;">CoRL 2023 (Oral)</h3>
+							<h3 style="margin:0 0 1vh 0;color:red;">获奖：入围最佳系统论文奖（共3篇）</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-10">
+					<div class="page-btn page-btn2 pc">
+						<a href="./resources/Robot_Parkour_Learning.pdf">
+							<span class="icon">
+								<i class="fas fa-file-pdf"></i>
+							</span>
+							<span>Paper</span>
+						</a>
+						<a href="https://arxiv.org/abs/2309.05665">
+							<span class="icon">
+								<i class="ai ai-arxiv"></i>
+							</span>
+							<span>arXiv</span>
+						</a>
+						<a href="https://youtu.be/M7lDCSF0KP0">
+							<span class="icon">
+								<i class="fab fa-youtube"></i>
+							</span>
+							<span>YouTube</span>
+						</a>
+						<a href="https://www.bilibili.com/video/BV1Nu4y1C7ae/">
+							<svg t="1699496865728" class="icon" viewBox="0 0 1024 1024" version="1.1"
+								xmlns="http://www.w3.org/2000/svg" p-id="4035" width="20" height="20">
+								<path
+									d="M360.896 183.968l-90.912-88.096s-14.208-17.472 9.824-37.248c24.16-19.648 25.376-10.912 33.504-5.472s135.2 130.816 135.2 130.816h-87.616z m301.952 3.264l90.912-88.096s14.208-17.472-9.824-37.248c-24.032-19.648-25.376-10.912-33.504-5.472s-135.2 130.816-135.2 130.816h87.616zM1004 350.336c-3.264-137.984-123.168-164.192-123.168-164.192s-614.336-4.96-742.496 0C10.176 222.304 20 350.336 20 350.336s1.696 274.272-0.128 413.12c13.824 138.848 120.864 160.928 120.864 160.928s42.72 0.864 73.92 0.864c3.264 8.992 5.696 52.544 54.24 52.544 48.416 0 54.24-52.544 54.24-52.544s354.88-1.696 384.352-1.696c1.696 14.816 8.992 54.976 57.536 54.24 48.416-0.864 51.712-57.536 51.712-57.536s16.384-1.696 65.664 0C997.344 898.88 1004 764.192 1004 764.192s-1.568-275.872 0-413.856z m-98.912 439.232c0 21.728-17.248 39.456-38.464 39.456H167.2c-21.248 0-38.464-17.6-38.464-39.456V326.336c0-21.728 17.248-39.456 38.464-39.456h699.424c21.248 0 38.464 17.6 38.464 39.456v463.232zM202.4 457.152l205.344-39.456 15.52 77.184-203.648 39.456z m638.976 0l-205.344-39.456-15.648 77.184 203.776 39.456z m-418.08 191.392s45.152 81.312 95.264-26.336c48.416 105.088 101.824 27.904 101.824 27.904l30.336 19.776s-56.672 91.136-131.424 22.208c-63.232 68.928-129.728-21.952-129.728-21.952l33.728-21.6z"
+									fill="#ffffff" p-id="4036"></path>
+							</svg>
+							<span>Bilibili</span>
+						</a>
+						<a href="https://x.com/zipengfu/status/1701316023612219445?s=20">
+							<span class="icon">
+								<i class="fab fa-twitter"></i>
+							</span>
+							<span>Twitter</span>
+						</a>
+						<a href="https://github.com/ZiwenZhuang/parkour">
+							<span class="icon">
+								<svg class="svg-inline--fa fa-github fa-w-16" aria-hidden="true" focusable="false"
+									data-prefix="fab" data-icon="github" role="img"
+									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" data-fa-i2svg="">
+									<path fill="currentColor"
+										d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+									</path>
+								</svg>
+							</span>
+							<span>Code</span>
+						</a>
+					</div>
+				</div>
+				<div class="col-1"></div>
+			</div>
+			<div class="row mob" style="">
+				<div class="page-btn">
+					<a href="./resources/Robot_Parkour_Learning.pdf">
+						<span class="icon">
+							<i class="fas fa-file-pdf"></i>
+						</span>
+						<span>Paper</span>
+					</a>
+					<a href="https://arxiv.org/abs/2309.05665">
+						<span class="icon">
+							<i class="ai ai-arxiv"></i>
+						</span>
+						<span>arXiv</span>
+					</a>
+					<a href="https://youtu.be/M7lDCSF0KP0">
+						<span class="icon">
+							<i class="fab fa-youtube"></i>
+						</span>
+						<span>YouTube</span>
+					</a>
+					<a href="https://www.bilibili.com/video/BV1Nu4y1C7ae/">
+						<svg t="1699496865728" class="icon" viewBox="0 0 1024 1024" version="1.1"
+							xmlns="http://www.w3.org/2000/svg" p-id="4035" width="14" height="14">
+							<path
+								d="M360.896 183.968l-90.912-88.096s-14.208-17.472 9.824-37.248c24.16-19.648 25.376-10.912 33.504-5.472s135.2 130.816 135.2 130.816h-87.616z m301.952 3.264l90.912-88.096s14.208-17.472-9.824-37.248c-24.032-19.648-25.376-10.912-33.504-5.472s-135.2 130.816-135.2 130.816h87.616zM1004 350.336c-3.264-137.984-123.168-164.192-123.168-164.192s-614.336-4.96-742.496 0C10.176 222.304 20 350.336 20 350.336s1.696 274.272-0.128 413.12c13.824 138.848 120.864 160.928 120.864 160.928s42.72 0.864 73.92 0.864c3.264 8.992 5.696 52.544 54.24 52.544 48.416 0 54.24-52.544 54.24-52.544s354.88-1.696 384.352-1.696c1.696 14.816 8.992 54.976 57.536 54.24 48.416-0.864 51.712-57.536 51.712-57.536s16.384-1.696 65.664 0C997.344 898.88 1004 764.192 1004 764.192s-1.568-275.872 0-413.856z m-98.912 439.232c0 21.728-17.248 39.456-38.464 39.456H167.2c-21.248 0-38.464-17.6-38.464-39.456V326.336c0-21.728 17.248-39.456 38.464-39.456h699.424c21.248 0 38.464 17.6 38.464 39.456v463.232zM202.4 457.152l205.344-39.456 15.52 77.184-203.648 39.456z m638.976 0l-205.344-39.456-15.648 77.184 203.776 39.456z m-418.08 191.392s45.152 81.312 95.264-26.336c48.416 105.088 101.824 27.904 101.824 27.904l30.336 19.776s-56.672 91.136-131.424 22.208c-63.232 68.928-129.728-21.952-129.728-21.952l33.728-21.6z"
+								fill="#ffffff" p-id="4036"></path>
+						</svg>
+						<span>Bilibili</span>
+					</a>
+					<a href="https://x.com/zipengfu/status/1701316023612219445?s=20">
+						<span class="icon">
+							<i class="fab fa-twitter"></i>
+						</span>
+						<span>Twitter</span>
+					</a>
+					<a href="https://github.com/ZiwenZhuang/parkour">
+						<span class="icon">
+							<svg class="svg-inline--fa fa-github fa-w-16" aria-hidden="true" focusable="false"
+								data-prefix="fab" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 496 512" data-fa-i2svg="">
+								<path fill="currentColor"
+									d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+								</path>
+							</svg>
+						</span>
+						<span>Code</span>
+					</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-10">
+					<div class="iframeBox">
+						<!-- <iframe src="https://www.bilibili.com/video/BV1Nu4y1C7ae/?spm_id_from=333.337.search-card.all.click&vd_source=1735f2ca2dd36592ef257941d82bc813" title="Robot Parkour Learning (CoRL 2022)"
+						        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+						<iframe src="https://player.bilibili.com/player.html?aid=915865728&bvid=BV1Nu4y1C7ae&cid=1263670817&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+					</div>
+				</div>
+				<div class="col-1"></div>
+			</div>
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">摘要</h3>
+				</div>
+				<div class="col-1"></div>
+				<div class="col-10" style="padding-top:4vh;padding-bottom:4vh;">
+					<p class="abstract-text">
+						跑酷是对于足式机器人运动的一个巨大挑战，要求机器人在复杂环境中快速克服各种障碍。现有的方法要么通过预设地形进行没有自带外部感知能力的运动技能，或者采用基于视觉的方法针对每一个单独的技能收集参考的动物数据或者设计复杂的奖励函数。然而，自主跑酷要求机器人学习通用的、基于视觉的、多样化的技能，以感知和对各种情景做出反应。在这项工作中，我们提出了一个框架，通过使用简单的奖励而不需要任何参考运动数据，学习一个端到端的基于视觉的跑酷策略，可以自主执行各种跑酷技能。我们开发了一种通过direct
+						collocation启发的强化学习方法，生成跑酷技能，包括爬过高障碍、跃过大间隙、爬行通过低矮障碍、穿过狭缝以及奔跑等。我们将这些技能蒸馏成一个基于视觉的跑酷策略，并且只采用机器狗自带的深度相机感知外部环境。我们演示了我们的系统可以在两种不同低成本的机器人上自主选择并执行适当的跑酷技能，以穿越具有挑战性的现实环境。
+					</p>
+				</div>
+				<div class="col-1"></div>
+			</div>
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">爬过超高障碍物</h3>
+				</div>
+				<div class="col-12" style="padding:3vh 0;">
+					<div class="list-video">
+						<div class="list-video-box">
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/climb/climb_1_1.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/climb/climb_1_2.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+						<div class="list-video-box">
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/climb/climb_2.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/climb/climb_husky_1.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+						<div class="list-video-box">
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/climb/climb_night_2.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/climb/go1_climb_1.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">跳远</h3>
+				</div>
+				<div class="col-12" style="padding:3vh 0;">
+					<div class="list-video">
+						<div class="list-video-box">
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/leap/leap_indoor_1.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/leap/go1_leap_1.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+						<div class="list-video-box">
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/leap/leap_1_1.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/leap/leap_1_2.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">爬过低矮障碍物</h3>
+				</div>
+				<div class="col-12" style="padding:3vh 0;">
+					<div class="list-video">
+						<div class="list-video-box">
+							<video class="video-box video-list" controls autoplay loop muted playsinline
+								src="./resources/crawl/go1_crawl_1.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box video-list" controls autoplay loop muted playsinline
+								src="./resources/crawl/crawl_1_5.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+						<div class="list-video-box">
+							<video class="video-box video-list" controls autoplay loop muted playsinline
+								src="./resources/crawl/crawl_2_2.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box video-list" controls autoplay loop muted playsinline
+								src="./resources/crawl/crawl_1_4.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">穿过窄封</h3>
+				</div>
+				<div class="col-12" style="padding:3vh 0;">
+					<div class="list-video">
+						<div class="list-video-box">
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/tilt/tilt_1.mp4" poster="./resources/loading-icon.gif"></video>
+							<video class="video-box" controls autoplay loop muted playsinline
+								src="./resources/tilt/tilt_2.mp4" poster="./resources/loading-icon.gif"></video>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">涌现出重复尝试的行为</h3>
+				</div>
+				<div class="col-12" style="padding-top:4vh;padding-bottom:4vh;">
+					<p class="abstract-text">
+						我们的跑酷策略允许机器人在初次尝试失败以后，持续重复尝试通过障碍物。通过强化学习策略，机器狗学会了将自己推离障碍物，从而保证自己有足够的准备距离再次尝试通过障碍物。
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 col-box" style="">
+					<div class="Emergent-video" style="width:100%;">
+						<video controls autoplay loop muted playsinline src="./resources/retry/retry_1.mp4"
+							poster="./resources/loading-icon.gif"></video>
+						<video controls autoplay loop muted playsinline src="./resources/retry/retry_2.mp4"
+							poster="./resources/loading-icon.gif"></video>
+					</div>
+				</div>
+			</div>
+			<div class="row pc" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">方法</h3>
+				</div>
+				<div class="col-12" style="padding-top:4vh;padding-bottom:4vh;">
+					<div class="timeLine">
+						<div class="timeLine-title">
+							<div class="timeLine-title-tag1"></div>
+							第一阶段：采用软动力学约束的强化学习预训练
+						</div>
+						<div class="timeLine-text">
+							<p>
+								在强化学习预训练阶段，我们允许机器人穿过设定好的障碍物。并且，我们通过自动调整任务难度的方式来保证软动力学约束的合理性。这样的惩罚项鼓励机器人逐渐学会克服这些障碍物，并且避免穿透障碍物。
+							</p>
+						</div>
+						<div class="" style="width:100%;display:flex;justify-content:center;">
+							<video style="width:60%;" controls autoplay loop muted playsinline
+								src="./resources/method/soft-dyanmics.mp4"
+								poster="./resources/loading-icon.gif"></video>
+						</div>
+						<div class="timeLine-title">
+							<div class="timeLine-title-tag1"></div>
+							第二阶段：采用强动力学约束的强化学习微调
+						</div>
+						<div class="timeLine-text">
+							<p>
+								在强化学习微调阶段，我们强制执行所有的动力学约束，并且微调了第一阶段训练的策略。
+							</p>
+						</div>
+						<div class="" style="width:100%;display:flex;justify-content:center;">
+							<video style="width:60%;" controls autoplay loop muted playsinline
+								src="./resources/method/hard-dynamics.mp4"
+								poster="./resources/loading-icon.gif"></video>
+						</div>
+						<div class="timeLine-title">
+							<div class="timeLine-title-tag1"></div>
+							第三阶段：通过蒸馏的方式训练一个基于视觉的跑酷策略
+						</div>
+						<div class="timeLine-text">
+							<p>
+								在训练好每一个模拟环境中的跑酷策略后，我们采用DAgger的方式将他们蒸馏成一个单独的跑酷策略，并且部署在机器狗上。只采用机器狗自带的传感器以及机载算力。
+							</p>
+						</div>
+						<div class="timeLine-image" style="width:100%;display:flex;justify-content:center;">
+							<img src="./resources/method/distillation.png" alt="" style="width:60%;" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mob" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">方法</h3>
+				</div>
+				<div class="col-12" style="padding-bottom:4vh;">
+					<div class="timeLine">
+						<div class="timeLine-title">
+							<div class="timeLine-title-tag1"></div>
+							第一阶段：采用软动力学约束的强化学习预训练
+						</div>
+						<div class="timeLine-text">
+							<p>
+								在强化学习预训练阶段，我们允许机器人穿过设定好的障碍物。并且，我们通过自动调整任务难度的方式来保证软动力学约束的合理性。这样的惩罚项鼓励机器人逐渐学会克服这些障碍物，并且避免穿透障碍物。
+							</p>
+						</div>
+						<video controls autoplay loop muted playsinline src="./resources/method/soft-dyanmics.mp4"
+							poster="./resources/loading-icon.gif"></video>
+						<div class="timeLine-title">
+							<div class="timeLine-title-tag1"></div>
+							第二阶段：采用强动力学约束的强化学习微调
+						</div>
+						<div class="timeLine-text">
+							<p>
+								在强化学习微调阶段，我们强制执行所有的动力学约束，并且微调了第一阶段训练的策略。
+							</p>
+						</div>
+						<video controls autoplay loop muted playsinline src="./resources/method/hard-dynamics.mp4"
+							poster="./resources/loading-icon.gif"></video>
+						<div class="timeLine-title">
+							<div class="timeLine-title-tag1"></div>
+							第三阶段：通过蒸馏的方式训练一个基于视觉的跑酷策略
+						</div>
+						<div class="timeLine-text">
+							<p>
+								在训练好每一个模拟环境中的跑酷策略后，我们采用DAgger的方式将他们蒸馏成一个单独的跑酷策略，并且部署在机器狗上。只采用机器狗自带的传感器以及机载算力。
+							</p>
+						</div>
+						<div class="timeLine-image" style="width:100%;display:flex;justify-content:center;">
+							<img src="./resources/method/distillation.png" alt="" style="width:60%;" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">失败案例</h3>
+				</div>
+				<div class="col-12" style="padding-top:4vh;padding-bottom:4vh;">
+					<div class="Failure-layout">
+						<div class="Failure-box">
+							<video style="display:block;" controls autoplay loop muted playsinline
+								src="./resources/failures/failure-climb-too-high.mp4"
+								poster="./resources/loading-icon.gif"></video>
+							<div class="Failure-text">
+								<p style="">
+									The robot fails to climb very high obstacles of 0.8m, three times the robot height.
+								</p>
+							</div>
+						</div>
+						<div class="Failure-box">
+							<video style="display:block;" controls autoplay loop muted playsinline
+								src="./resources/failures/failure-leap-low-friction.mp4"
+								poster="./resources/loading-icon.gif"></video>
+							<div class="Failure-text">
+								<p style="">
+									The robot fails to leap on a low-friction platform. The rear legs slip during
+									leaping leading to not much forward momentum for the robot to reach the other side.
+								</p>
+							</div>
+						</div>
+						<div class="Failure-box">
+							<video style="display:block;" controls autoplay loop muted playsinline
+								src="./resources/failures/failure-climb-soft-objects.mp4"
+								poster="./resources/loading-icon.gif"></video>
+							<div class="Failure-text">
+								<p style="">
+									The robot fails to climb a high and soft obstacle.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<div class="row" style="">
+				<div class="page-h3">
+					<h3 style="margin:0;">引用这篇工作</h3>
+				</div>
+				<div class="col-12" style="padding-top:4vh;padding-bottom:2vh;">
+					<div class="footercode" style="">
+						<pre class="preClass" style="padding:1vh 1vw;border-radius:4px;"><code>@inproceedings{zhuang2023robot,
+  author    = {Zhuang, Ziwen and Fu, Zipeng and Wang, Jianren and Atkeson, Christopher and Schwertfeger, Sören and Finn, Chelsea and Zhao, Hang},
+  title     = {Robot Parkour Learning},
+  booktitle = {Conference on Robot Learning ({CoRL})},
+  year      = {2023},
+}</code></pre>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		// $('#pcClimbSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true,
+		// 	pause: 'hover'
+		// })
+		// $('#mobClimbSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true
+		// })
+		// $('#pcLeapSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true,
+		// 	pause: 'hover'
+		// })
+		// $('#mobLeapSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true
+		// })
+		// $('#pcCrawlSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true,
+		// 	pause: 'hover'
+		// })
+		// $('#mobCrawlSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true
+		// })
+		// $('#pcTiltSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true,
+		// 	pause: 'hover'
+		// })
+		// $('#mobTiltSwiper').carousel({
+		// 	interval: 2000,
+		// 	touch: true
+		// })
+		var ClimbClickIndex = true;
+		var LeapClickIndex = true;
+		var CrawlClickIndex = true;
+		var TiltClickIndex = true;
+
+		function ClickSwiper(index) {
+			// switch (index) {
+			// 	case 1:
+			// 		if (ClimbClickIndex) {
+			// 			$('.clickImage1').attr('src', '././static/cn/list2.png')
+			// 			$('.swiper-video-Climb').hide()
+			// 			$('.list-video-Climb').show()
+			// 		} else {
+			// 			$('.clickImage1').attr('src', '././static/cn/list.png')
+			// 			$('.swiper-video-Climb').show()
+			// 			$('.list-video-Climb').hide()
+			// 		}
+			// 		ClimbClickIndex = !ClimbClickIndex;
+			// 		break;
+			// 	case 2:
+			// 		if (LeapClickIndex) {
+			// 			$('.clickImage2').attr('src', '././static/cn/list2.png')
+			// 			$('.swiper-video-Leap').hide()
+			// 			$('.list-video-Leap').show()
+			// 		} else {
+			// 			$('.clickImage2').attr('src', '././static/cn/list.png')
+			// 			$('.swiper-video-Leap').show()
+			// 			$('.list-video-Leap').hide()
+			// 		}
+			// 		LeapClickIndex = !LeapClickIndex;
+			// 		break;
+			// 	case 3:
+			// 		if (CrawlClickIndex) {
+			// 			$('.clickImage3').attr('src', '././static/cn/list2.png')
+			// 			$('.swiper-video-Crawl').hide()
+			// 			$('.list-video-Crawl').show()
+			// 		} else {
+			// 			$('.clickImage3').attr('src', '././static/cn/list.png')
+			// 			$('.swiper-video-Crawl').show()
+			// 			$('.list-video-Crawl').hide()
+			// 		}
+			// 		CrawlClickIndex = !CrawlClickIndex;
+			// 		break;
+			// 	case 4:
+			// 		if (TiltClickIndex) {
+			// 			$('.clickImage4').attr('src', '././static/cn/list2.png')
+			// 			$('.swiper-video-Tilt').hide()
+			// 			$('.list-video-Tilt').show()
+			// 		} else {
+			// 			$('.clickImage4').attr('src', '././static/cn/list.png')
+			// 			$('.swiper-video-Tilt').show()
+			// 			$('.list-video-Tilt').hide()
+			// 		}
+			// 		TiltClickIndex = !TiltClickIndex;
+			// 		break;
+			// 	default:
+			// 		break;
+			// }
+		}
+	</script>
+</html>
