@@ -262,7 +262,7 @@
       <div class="column is-two-thirds">
         <div class="content has-text-justified">
           <p>
-            The overall pipeline of AnyBimanual, which primarily consists of a skill manager and a perception manager. The skill manager adaptively coordinates primitive skills for each robot arm, while the perception manager mitigates the distributional shift from unimanual to bimanual by decomposing the 3D voxel observation for each arm.
+            The overall pipeline of AnyBimanual, which primarily consists of a skill manager and a perception manager. The skill manager adaptively coordinates primitive skills for each robot arm, while the perception manager mitigates the distributional shift from unimanual to bimanual by decomposing the visual observation for each arm.
           </p>
         </div>
       </div>
@@ -312,7 +312,7 @@
       <div class="column is-two-thirds">
         <div class="content has-text-justified">
           <p>
-            The experiments in the simulation environment were conducted in RLBench2, where object positions were randomized in each episode.
+            The simulated experiments are conducted in RLBench2. We transfer a well-recognized unimanual policy PerAct to bimanual policy with AnyBimanual, and find that it can complete 12 challenging bimanual tasks simultaneously.  
           </p>
         </div>
       </div>
@@ -406,8 +406,7 @@
         <div class="content has-text-justified">
         <p>
           The real-world experiments are performed in a tabletop setup with objects randomized in location every episode. AnyBimanual can simultaneously conduct 9 complex
-          real-world bimanual manipulation tasks with one model. Different
-          colors mean different success rates.
+          real-world bimanual manipulation tasks with one model.
         </p>
         </div>
       </div>
